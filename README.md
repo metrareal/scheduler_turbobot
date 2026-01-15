@@ -66,7 +66,8 @@ planner-bot/
 ### 🛠️ Технологии
 
 - [Python 3.10+](https://www.python.org/)
-- [python-telegram-bot](https://python-telegram-bot.org/) / [aiogram](https://aiogram.dev/)
+- [aiogram](https://aiogram.dev/)
+- [dotenv](https://pypi.org/project/python-dotenv/)
 - JSON для хранения данных
 
 ### 📄 Лицензия
