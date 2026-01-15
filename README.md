@@ -1,4 +1,4 @@
-# 📅 Planner Bot <p align="center"> <img src="https://img.shields.io/badge/Python-3.10+-blue?style=for-the-badge&logo=python&logoColor=white" alt="Python"> <img src="https://img.shields.io/badge/Telegram-Bot-26A5E4?style=for-the-badge&logo=telegram&logoColor=white" alt="Telegram"> <img src="https://img.shields.io/badge/License-MIT-green?style=for-the-badge" alt="License"> </p> ````
+# 📅 Planner Bot <p align="center"> <img src="https://img.shields.io/badge/Python-3.10+-blue?style=for-the-badge&logo=python&logoColor=white" alt="Python"> <img src="https://img.shields.io/badge/Telegram-Bot-26A5E4?style=for-the-badge&logo=telegram&logoColor=white" alt="Telegram"> <img src="https://img.shields.io/badge/License-MIT-green?style=for-the-badge" alt="License"> </p>
 ## 📋 Возможности
 
 - ✅ Создание задач
@@ -44,7 +44,7 @@ pip install -r requirements.txt
 ```bash
 BOT_TOKEN=your_telegram_bot_token
 ```
-`:bulb:` *Получить токен можно у [@BotFather](https://t.me/BotFather)*
+💡 *Получить токен можно у [@BotFather](https://t.me/BotFather)*
 
 ### 5. Запустите бота
 
@@ -52,7 +52,7 @@ BOT_TOKEN=your_telegram_bot_token
 python bot.py
 ```
 
-### `:bulb:` Структура проекта
+### 📁 Структура проекта
 
 ```text
 planner-bot/
@@ -63,17 +63,17 @@ planner-bot/
 └── README.md             # Документация
 ```
 
-### `:scissors:` Технологии
+### 🛠️ Технологии
 
 - [Python 3.10+](https://www.python.org/)
 - [python-telegram-bot](https://python-telegram-bot.org/) / [aiogram](https://aiogram.dev/)
 - JSON для хранения данных
 
-### `:page_facing_up:` Лицензия
+### 📄 Лицензия
 
 Этот проект распространяется под лицензией MIT. См. файл [LICENSE](https://lmarena.ai/c/LICENSE) для подробностей.
 
-### `:iphone:` Контакты
+### 📞 Контакты
 
 - Telegram: [*тык*](https://t.me/speciallyforsomeone)
 - GitHub: [*тык*](https://github.com/metrareal)
