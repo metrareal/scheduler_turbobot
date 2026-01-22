@@ -987,35 +987,6 @@ async def delete_note(callback: CallbackQuery):
         await notes_menu(callback)
 
 
-# @router.callback_query(F.data == "settings")
-# async def show_settings(callback: CallbackQuery):
-#     user = db.get_user(callback.from_user.id)
-#     settings = user['settings']
-    
-#     text = "⚙️ **Настройки**\n\n"
-#     text += f"🔔 Уведомления: {'Вкл' if settings['notifications'] else 'Выкл'}\n"
-#     text += f"🌍 Часовой пояс: UTC{settings['timezone']:+d}\n"
-    
-#     buttons = [
-#         [InlineKeyboardButton(
-#             text=f"🔔 {'Выключить' if settings['notifications'] else 'Включить'} уведомления",
-#             callback_data="toggle_notifications"
-#         )],
-#         [InlineKeyboardButton(text="◀️ Назад", callback_data="main_menu")]
-#     ]
-    
-#     await callback.message.edit_text(text, reply_markup=InlineKeyboardMarkup(inline_keyboard=buttons))
-
-
-# @router.callback_query(F.data == "toggle_notifications")
-# async def toggle_notifications(callback: CallbackQuery):
-#     user = db.get_user(callback.from_user.id)
-#     user['settings']['notifications'] = not user['settings']['notifications']
-#     db.save()
-    
-#     await show_settings(callback)
-
-
 async def main():
     dp.include_router(router)
     await bot.delete_webhook(drop_pending_updates=True)
