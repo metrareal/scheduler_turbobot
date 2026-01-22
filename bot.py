@@ -188,6 +188,32 @@ def get_note_detail_keyboard(note_idx: int) -> InlineKeyboardMarkup:
     ]
     return InlineKeyboardMarkup(inline_keyboard=buttons)
 
+def get_timezone_keyboard() -> InlineKeyboardMarkup:
+    buttons = []
+    timezones = [
+        ("UTC-12", -12), ("UTC-11", -11), ("UTC-10", -10),
+        ("UTC-9", -9), ("UTC-8", -8), ("UTC-7", -7),
+        ("UTC-6", -6), ("UTC-5", -5), ("UTC-4", -4),
+        ("UTC-3", -3), ("UTC-2", -2), ("UTC-1", -1),
+        ("UTC+0", 0), ("UTC+1", 1), ("UTC+2", 2),
+        ("UTC+3 (МСК)", 3), ("UTC+4", 4), ("UTC+5", 5),
+        ("UTC+6", 6), ("UTC+7", 7), ("UTC+8", 8),
+        ("UTC+9", 9), ("UTC+10", 10), ("UTC+11", 11), ("UTC+12", 12)
+    ]
+    
+    row = []
+    for label, tz in timezones:
+        row.append(InlineKeyboardButton(text=label, callback_data=f"tz_{tz}"))
+        if len(row) == 3:
+            buttons.append(row)
+            row = []
+    
+    if row:
+        buttons.append(row)
+    
+    buttons.append([InlineKeyboardButton(text="◀️ Назад", callback_data="settings")])
+    return InlineKeyboardMarkup(inline_keyboard=buttons)
+
 
 def format_tasks_list(tasks: List[Dict], title: str = "Ваши задачи") -> str:
     if not tasks:
@@ -643,6 +669,7 @@ async def show_settings(callback: CallbackQuery):
             text=f"🔔 {'Выключить' if settings['notifications'] else 'Включить'} уведомления",
             callback_data="toggle_notifications"
         )],
+        [InlineKeyboardButton(text="🌍 Изменить часовой пояс", callback_data="change_timezone")],
         [InlineKeyboardButton(text="◀️ Назад", callback_data="main_menu")]
     ]
     
@@ -655,6 +682,22 @@ async def toggle_notifications(callback: CallbackQuery):
     user['settings']['notifications'] = not user['settings']['notifications']
     db.save()
     
+    await show_settings(callback)
+    
+@router.callback_query(F.data == "change_timezone")
+async def change_timezone_menu(callback: CallbackQuery):
+    text = "🌍 **Выбор часового пояса**\n\nВыберите ваш часовой пояс:"
+    await callback.message.edit_text(text, reply_markup=get_timezone_keyboard())
+
+
+@router.callback_query(F.data.startswith("tz_"))
+async def set_timezone(callback: CallbackQuery):
+    tz = int(callback.data.split("_")[1])
+    user = db.get_user(callback.from_user.id)
+    user['settings']['timezone'] = tz
+    db.save()
+    
+    await callback.answer(f"✅ Часовой пояс установлен: UTC{tz:+d}")
     await show_settings(callback)
 
 
@@ -944,33 +987,33 @@ async def delete_note(callback: CallbackQuery):
         await notes_menu(callback)
 
 
-@router.callback_query(F.data == "settings")
-async def show_settings(callback: CallbackQuery):
-    user = db.get_user(callback.from_user.id)
-    settings = user['settings']
+# @router.callback_query(F.data == "settings")
+# async def show_settings(callback: CallbackQuery):
+#     user = db.get_user(callback.from_user.id)
+#     settings = user['settings']
     
-    text = "⚙️ **Настройки**\n\n"
-    text += f"🔔 Уведомления: {'Вкл' if settings['notifications'] else 'Выкл'}\n"
-    text += f"🌍 Часовой пояс: UTC{settings['timezone']:+d}\n"
+#     text = "⚙️ **Настройки**\n\n"
+#     text += f"🔔 Уведомления: {'Вкл' if settings['notifications'] else 'Выкл'}\n"
+#     text += f"🌍 Часовой пояс: UTC{settings['timezone']:+d}\n"
     
-    buttons = [
-        [InlineKeyboardButton(
-            text=f"🔔 {'Выключить' if settings['notifications'] else 'Включить'} уведомления",
-            callback_data="toggle_notifications"
-        )],
-        [InlineKeyboardButton(text="◀️ Назад", callback_data="main_menu")]
-    ]
+#     buttons = [
+#         [InlineKeyboardButton(
+#             text=f"🔔 {'Выключить' if settings['notifications'] else 'Включить'} уведомления",
+#             callback_data="toggle_notifications"
+#         )],
+#         [InlineKeyboardButton(text="◀️ Назад", callback_data="main_menu")]
+#     ]
     
-    await callback.message.edit_text(text, reply_markup=InlineKeyboardMarkup(inline_keyboard=buttons))
+#     await callback.message.edit_text(text, reply_markup=InlineKeyboardMarkup(inline_keyboard=buttons))
 
 
-@router.callback_query(F.data == "toggle_notifications")
-async def toggle_notifications(callback: CallbackQuery):
-    user = db.get_user(callback.from_user.id)
-    user['settings']['notifications'] = not user['settings']['notifications']
-    db.save()
+# @router.callback_query(F.data == "toggle_notifications")
+# async def toggle_notifications(callback: CallbackQuery):
+#     user = db.get_user(callback.from_user.id)
+#     user['settings']['notifications'] = not user['settings']['notifications']
+#     db.save()
     
-    await show_settings(callback)
+#     await show_settings(callback)
 
 
 async def main():
